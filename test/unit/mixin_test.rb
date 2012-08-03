@@ -67,6 +67,19 @@ module FocusedController
       end
     end
 
+    describe '.run' do
+      subject do
+        @klass = Class.new do
+          include FocusedController::Mixin
+        end
+      end
+
+      it 'defines a #run method' do
+        subject.run { 'running' }
+        subject.new.run.must_equal 'running'
+      end      
+    end
+
     describe '.expose' do
       subject do
         @klass = Class.new do
@@ -84,7 +97,7 @@ module FocusedController
         end
       end
 
-      it 'defines a method' do
+      it 'defines a #foo method' do
         subject.expose(:foo) { 'bar' }
         subject.new.foo.must_equal 'bar'
       end

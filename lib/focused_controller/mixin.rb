@@ -8,11 +8,14 @@ module FocusedController
     extend ActiveSupport::Concern
 
     included do
+      # puts "INCLUDED FocusedController::MIXIN"
       class_attribute :allow_view_assigns
       self.allow_view_assigns = false
     end
 
     module ClassMethods
+      # puts "extending with ClassMethods"
+
       def controller_path
         @focused_controller_path ||= name && name.sub(/\:\:[^\:]+$/, '').sub(/Controller$/, '').underscore
       end
@@ -37,6 +40,10 @@ module FocusedController
         end
 
         helper_method name
+      end
+
+      def run &block
+        define_method :run, &block
       end
     end
 

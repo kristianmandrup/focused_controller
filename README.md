@@ -102,6 +102,42 @@ module PostsController
 end
 ```
 
+If you like, you can also `require 'focused_controller/macros'`. 
+This will add `#use_focused_macros` to all Modules so it can be used in your Controller modules. 
+
+Calling `#use_focused_macros` will extend the Controller module with the Macros module which in turn will make the macro `#focused_action` available as a shortcut for creating Action classes. 
+
+You can also set the default action parent class to be used via `#action_parent`, by default `FocusedAction`.
+
+```ruby
+# focused_action.rb
+class FocusedAction < ApplicationController
+  include FocusedController::Mixin
+end
+```
+
+An example will demonstrate these macro features:
+
+```ruby
+require 'focused_controller/macros'
+
+module ServicesController
+  use_focused_macros
+
+  action_parent MyBaseAction
+
+  focused_action :index do
+    expose(:services) { @services = Service.all }
+  end
+
+  focused_action :show do
+    run do
+      render text: 'Service is shown'
+    end
+  end
+end  
+```
+
 ## Routing ##
 
 Rails' normal routing assumes your actions are methods inside an object
