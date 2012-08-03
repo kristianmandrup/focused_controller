@@ -3,11 +3,11 @@ require 'focused_controller/focused_action'
 module FocusedController
   module Macros
     def action_parent clazz
-      @default_focused_action ||= clazz
+      @default_action_parent ||= clazz
     end
 
     def get_action_parent
-      @default_focused_action ||= ::FocusedAction
+      @default_action_parent ||= ::FocusedAction
     end
 
     # Usage:
@@ -23,19 +23,11 @@ module FocusedController
     #   end
     # end
     def focused_action name, parent = nil, &block
-      container_modules = self.name.split('::')
-      clazz_name = name.to_s.camelize
-      parent ||= get_action_parent
-      clazz = parent ? Class.new(parent) : Class.new
+      clazz_name = name.to_s.camelize      
+      clazz = Class.new(parent || get_action_parent)
       self.const_set clazz_name, clazz
       if block_given?
-        self.const_get(clazz_name).class_eval &block      
-      else
-        self.const_get(clazz_name).class_eval do
-          def run
-            puts "Focused action: #{clazz_name}"
-          end
-        end
+        self.const_get(clazz_name).class_eval &block
       end
     end
   end
