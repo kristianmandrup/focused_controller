@@ -2,4 +2,5 @@ require 'focused_controller/version'
 require 'focused_controller/route'
 require 'focused_controller/mixin'
 require 'focused_controller/route_mapper'
-require 'focused_controller/focused_action'
+
+require 'focused_controller/focused_action' if defined?(ApplicationController)
