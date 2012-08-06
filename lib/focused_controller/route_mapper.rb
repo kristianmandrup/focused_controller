@@ -28,7 +28,9 @@ module FocusedController
       elsif @options[:action] && @scope[:controller]
         name = ''
         name << @scope[:module].camelize << '::' if @scope[:module]
-        name << @scope[:controller].camelize << 'Controller::'
+        name << @scope[:controller].camelize
+        name << 'Controller' unless @scope[:controller].camelize =~ /Controller$/
+        name << '::'
         name << @options[:action].to_s.camelize
         name
       end
