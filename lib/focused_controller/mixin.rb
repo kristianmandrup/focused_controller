@@ -24,8 +24,9 @@ module FocusedController
         action(FocusedController.action_name).call(env)
       end
 
-      def expose(name, &block)
+      def expose(*names, &block)
         if block_given?
+          name = names.first
           define_method(name) do |*args|
             ivar = "@#{name}"
 
@@ -35,11 +36,13 @@ module FocusedController
               instance_variable_set(ivar, instance_exec(block, *args, &block))
             end
           end
+          helper_method name
         else
-          attr_reader name
-        end
-
-        helper_method name
+          names.each do |name|
+            attr_reader name
+            helper_method name
+          end
+        end        
       end
 
       def run &block
