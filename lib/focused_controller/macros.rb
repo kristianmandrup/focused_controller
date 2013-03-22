@@ -29,6 +29,12 @@ module FocusedController
       if block_given?
         self.const_get(clazz_name).class_eval &block
       end
+      self.const_get(clazz_name)
+    end
+
+    def focused_base_action name, parent = nil, &block      
+      clazz = focused_action name, parent, &block
+      action_parent clazz
     end
   end
 end
